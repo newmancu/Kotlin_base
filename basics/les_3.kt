@@ -1,3 +1,6 @@
+
+
+import com.sun.corba.se.impl.io.TypeMismatchException
 abstract class Person
 {
   var name: String
@@ -41,7 +44,7 @@ open class Robot(name: String, arc: String) : Person(name)
   }
 }
 
-fun printPArr(arr: Array<Person>)
+fun <T:Person>printPArr(arr: Array<out T>)
 {
   for (pi in arr)
   {
@@ -53,8 +56,27 @@ fun printPArr(arr: Array<Person>)
 fun main()
 {
   val h1 = Human("Steave", 10, true)
+  println("PersonID: ${Person.personId}")
   val r1 = Robot("Apple", "Mark1")
   val h2 = Human("Jane", 22)
   var pArr = arrayOf<Person>(h1,h2,r1)
-  printPArr(pArr)
+  // printPArr(pArr)
+  println("PersonID: ${Person.personId}")
+  val x = Person::name
+  println(x.get(h2))
+  println("${x.name}")
+  try {
+    printPArr(pArr)
+  }
+  catch(e: TypeMismatchException) {
+    println("printPArr this incorrect argument")
+  }
+  try {
+    val arr = arrayOf<Person>(Human("asd"),)
+    printPArr(arr)
+  }
+  catch(e :TypeMismatchException) {
+    println("printPArr this incorrect argument")
+  }
+  
 }
